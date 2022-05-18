@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="/fragments/head :: home-customer"></head>
+<body> 
+    <nav th:replace="/fragments/nav :: nav-customer" class="navbar navbar-expand-lg navbar-light bg-light" ></nav>
+    <main>
+        <h1>레시피 목록 페이지</h1>
+        <a th:href="@{/recipe/board/enroll}">게시글 등록</a>
+        <div class="card">
+            <table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">NO</th>
+                        <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">TITLE</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">AUTHOR
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">등록일</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">수정일</th>
+                        <th class="text-secondary opacity-7">기타</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board:${boardList}">
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs" th:text="${board.id}"></span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a th:href="@{/recipe/board/get(id=${board.id})}">
+                                <span class="text-secondary text-xs" th:text="${board.title}"></span>
+                            </a>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs" th:text="${board.writer}"></span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs"
+                                th:text="${#temporals.format(board.registerdate, 'yyyy-MM-dd a hh:mm:ss')}"></span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs"
+                                th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd a hh:mm:ss')}"></span>
+                        </td>
+                        <td class="align-middle">
+                            <a href="#" class="text-secondary text-xs"> Edit </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 테이블 끝 -->
+            <!-- 검색창 -->
+            <div class="d-flex justify-content-center mt-2">
+                <div class="w-md-25 w-sm-50 input-group input-group-outline is-filled">
+                    <input type="text" id="searchKeyword" th:value="${pmk.criteria.keyword}" class="form-control" placeholder="search here.." />
+                    <button id="searchButton" class="btn btn-primary mb-0">검색</button>
+                </div>
+            </div>
+          <!-- 페이지네이션 시작  -->
+            <nav aria-label="Page navigation" th:if="${pmk.endPage > 0}">
+                <ul class="pagination navigation justify-content-center mt-5">
+                    <li class="page-item" th:if="${pmk.prev}">
+                        <a class="page-link" th:href="@{/recipe/board/list}+'?pageNum=__${pmk.startPage-1}__'">
+                            <span class="material-icons"> < </span>
+                            <span class="sr-only">이전</span>
+                        </a>
+                    </li>
+    
+                    <li class="page-item" th:classappend="${pmk.criteria.pageNum == number} ? 'active':'' " th:each="number : ${#numbers.sequence(pmk.startPage,pmk.endPage)}">
+                        <a class="page-link" th:href="@{/recipe/board/list}+'?pageNum=__${number}__'" th:text="${number}"></a>
+                    </li>
+    
+                    <li class="page-item"  th:if="${pmk.next}">
+                        <a class="page-link" th:href="@{/recipe/board/list}+'?pageNum=__${pmk.endPage+1}__'">
+                            <span class="material-icons"> > </span>
+                            <span class="sr-only">다음</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- 카드 끝 -->
+        </div>
+    
+    </main>
+    <!-- <script>
+        document.getElementById('pageName').textContent = '게시판 목록';
+    </script> -->
+    <script>
+        const searchKeyword = document.getElementById('searchKeyword'); //검색창의 input 값내용
+        const searchButton = document.getElementById('searchButton'); //검색버튼
+
+        /* 검색버튼 눌렀을때 (이벤트 'click') 키워드를 url에 추가해서 보내기 */
+        searchButton.addEventListener('click', function(){
+            let keyword = ''; //키워드 변수 선언
+            let 공백제거키워드 = searchKeyword.value.trim();
+            if(공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있으면 &keyword=키워드
+            
+            location.href='/recipe/board/list?pageNum=1' + keyword; //처음 키워드 검색시 무조건 1페이지 보여줌
+        
+        });
+
+        /* 페이지네이션 a태그들을 전부 Js 요청으로 바꾸기 (키워드 추가) */
+        const pageLinks = document.querySelectorAll('ul.pagination .page-link')
+
+
+    </script>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!-- 상품 추가 관리자용 -->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: home-admin"></head>
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div>상품 추가</div>
+      <a th:href="@{/admin/products}" class="btn btn-primary my-3">돌아가기</a>
+      
+      <form method="post" th:object="${product}" enctype="multipart/form-data" th:action="@{/admin/products/add}">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">에러 발생</div>
+        <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
+        
+        <div class="form-group">
+          <label for="">상품이름</label>
+          <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+          <input type="text" class="form-control" th:field="*{name}" placeholder="이 름">
+        </div>
+        
+        <div class="form-group">
+          <label for="">원산지</label>
+          <span class="error" th:if="${#fields.hasErrors('origin')}" th:errors="*{origin}"></span>
+          <input type="text" class="form-control" th:field="*{origin}" placeholder="원산지">
+        </div>
+
+        <div class="form-group">
+          <label for="">가 격</label>
+          <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+          <input type="text" class="form-control" th:field="*{price}" placeholder="가 격">
+        </div>
+        
+        <div class="form-group">
+          <label for="">카테고리</label>
+          <span class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
+          <select class="form-control" th:field="*{categoryId}" >
+            <option value="0">카테고리 선택</option>
+            <option th:if="${category.name} != '전체'" th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+          </select>
+        </div>
+        
+        <!-- 이미지 -->
+        <div class="form-group">
+          <label for="">이미지</label>
+          <span class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+          <input type="file" class="form-control-file" th:id="file"  th:name="file">
+          <!-- 미리보기 이미지 -->
+          <img src="#" id="imgPreview"/>
+        </div>
+      
+        <div class="form-group">
+          <label for="">제품설명</label>
+          <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+          <textarea class="form-control" rows="3"  th:field="*{description}" placeholder="상품 설명"></textarea>
+        </div>
+      
+        <button type="submit" class="btn btn-warning">추 가</button>
+      </form>
+
+    </main>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+    <script>
+      $(function(){
+        $('#imgPreview').hide(); //처음에 보여줄 이미지가 없어서 img태그 숨기기
+        $('#file').change(function(){  //input에 파일이 바뀌면(올라가면) readURL 함수실행
+          readURL(this);    //readURL 에 이 입력객체(this)가 입력됨
+        })
+      })
+
+      function readURL(input) {
+        //파일(이미지)가 있을 경우 실행
+        if (input.files && input.files[0]) { 
+
+          //1. 파일을 읽는 자바스크립트 reader객체 생성
+          let reader = new FileReader();
+
+          //2. reader에 첫번째 파일 경로읽기
+          reader.readAsDataURL(input.files[0]);
+
+          //3. 파일을 성공적으로 다 읽을때(onload 이벤트)
+          //화면 페이지의 img태그에 reader로 읽은 경로 결과를 속성src에 입력
+          reader.onload = function (e) {
+            $('#imgPreview').attr('src', e.target.result).width(200).show();
+          }
+        }
+      }
+    </script>
+  </body>
+
+</html>

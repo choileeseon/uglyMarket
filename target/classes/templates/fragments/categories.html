@@ -1,0 +1,16 @@
+<div class="col-3" th:fragment="categories">
+    <h3 class="display-4">Categories</h3>
+    
+    <!-- 카테고리 -->
+    <ul class="px-4 max-w-screen-lg mx-auto flex w-full">
+        <li class="font-bold font-gray-700 font-h3 cursor-pointer" th:each="category: ${ccategories}">
+            <a class="nav-link" th:href="@{'/category/' + ${category.slug}}" th:text="${category.name}"></a>
+        </li>
+    </ul>
+        
+    <!-- 카트 담은거 보여주기 -->
+    <div th:replace="/fragments/cart_partial"></div> 
+    
+</div>
+  
+  

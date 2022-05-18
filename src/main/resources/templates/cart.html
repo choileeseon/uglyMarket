@@ -1,0 +1,101 @@
+<!-- 고객용 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: home-customer"> </head>
+  <body>
+    <nav th:replace="/fragments/nav :: nav-customer"></nav>
+
+    <main class="container-fluid mt-5"> <!-- fluid는 가로 해상도에 상관없이 100%의 width-->
+      <div class="row"> <!--한 줄-->
+        <div th:replace="/fragments/categories :: categories"></div>
+        <div class="col"></div> <!-- 1/12 -->
+        <div class="col-7">
+          <h2 class="display-4">장바구니</h2>
+          <table class="table">
+            <tr>
+              <th>상품</th>
+              <th>이미지</th>
+              <th>수량</th>
+              <th>가격</th>
+              <th>합계</th>
+            </tr>
+            <tr th:each="item : ${cart}">
+              <!-- 왜 value? -->
+              <td th:text="${item.value.name}"></td>
+              <td>
+                <img th:src="@{'/media/'+${item.value.image}}" style="height: 2em" />
+              </td>
+              <td>
+                <span th:text="${item.value.quantity}"></span>
+                <a th:href="@{'/cart/add/'+${item.value.id}}+'?cartPage=true'" class="btn btn-success btn-sm">+</a>
+                <a th:href="@{'/cart/subtract/'+${item.value.id}}" class="btn btn-primary btn-sm">-</a>
+                <a th:href="@{'/cart/remove/'+${item.value.id}}" class="btn btn-danger btn-sm">삭제</a>
+              </td>
+              <td th:text="${item.value.price} + ' 원'"></td>
+              <td th:with="totalPrice = ${item.value.price}*${item.value.quantity}" th:text="${totalPrice} + ' 원'"></td>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-right pr-5" th:text="'총 합계 : ' + ${ctotal} + ' 원'"></th>
+            </tr>
+            <tr>
+              <td>
+                <a href="/cart/clear" class="btn btn-danger">비우기</a>
+              </td>
+              <td colspan="4" class="text-right">
+                <a href="#" class="btn btn-success checkout">체크아웃</a>
+              </td>
+            </tr>
+          </table>
+        </div> <!-- 7/12 -->
+        <div class="col"></div> <!-- 1/12 -->
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <script>
+      $(function () {
+        $('a.checkout').click(function (e) {
+          e.preventDefault(); // a태그 이동 정지
+          $.get('/cart/clear', {}, function () {}); //카트 클리어 요청
+          //$("form#paypalform").submit();
+          kakaoPay();
+        });
+      });
+      function kakaoPay() {
+        var IMP = window.IMP; // 생략 가능
+        IMP.init('imp61632669'); // 예: imp00000000
+        IMP.request_pay(
+          {
+            pg: 'kakaopay',
+            //pay_method : 'card', //생략 가능
+            merchant_uid: 'order_no_0007', // 상점에서 관리하는 주문 번호
+            name: '주문명:결제테스트',
+            amount: '[[${ctotal}]]',
+            buyer_email: 'iamport@siot.do',
+            buyer_name: '구매자이름',
+            buyer_tel: '010-1234-5678',
+            buyer_addr: '서울특별시 강남구 삼성동',
+            buyer_postcode: '123-456',
+          },
+          function (rsp) {
+            if (rsp.success) {
+              let msg = '결제가 완료되었습니다.';
+              msg += '고유ID : ' + rsp.imp_uid;
+              msg += '상점 거래ID : ' + rsp.merchant_uid;
+              msg += '결제 금액 : ' + rsp.paid_amount;
+              msg += '카드 승인번호 : ' + rsp.apply_num;
+              if (!alert(msg)) location.reload();
+            } else {
+              let msg = '결제에 실패하였습니다.';
+              msg += '에러내용 : ' + rsp.error_msg;
+              alert(msg);
+            }
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
+

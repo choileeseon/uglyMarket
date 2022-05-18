@@ -1,0 +1,64 @@
+<!-- 페이지 관리자용 -->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="/fragments/head :: home-admin"></head>
+    <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+        <a th:href="@{/admin/pages/add}" class="btn btn-primary my-3">추가하기</a>
+        <div th:if="${message}" th:text="${message}" th:class="${'alert '+ alertClass}"></div>
+        <div th:if="${!pages.empty}">
+            <table class="table sorting mt-5" id="pages">
+                <thead>
+                <tr class="home">
+                    <th scope="col"> # </th>
+                    <th scope="col">제 목</th>
+                    <th scope="col">슬러그</th>
+                    <th scope="col">수 정</th>
+                    <th scope="col">삭 제</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <!-- th:id="'id_'+${page.id}" ??-->
+                <tr th:each="page : ${pages}" th:id="'id_' + ${page.id}" th:class="${page.slug}"> 
+                    <td th:text="${page.sorting+1}" scope="row"></td>
+                    <td th:text="${page.title}"></td>
+                    <td th:text="${page.slug}"></td>
+                    <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">수정</a></td>
+                    <td><a th:if="${page.title != 'Home'}" th:href="@{'/admin/pages/delete/' + ${page.id}}" class="deleteConfirm">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${pages.empty}">
+            <p class="display-4 mt-5">페이지 없음</p>
+        </div>
+
+    </main>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+    <!-- index.html에서만 쓰는 script -->
+    <script>
+        let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        $('table#pages').sortable({
+            items: 'tr:not(.home)', //클래스 home만 제외하고 sortable
+            update: function(){ //순서가 바뀌었을때 함수 실행
+                let ids = $('table#pages').sortable("serialize"); //th:id="'id_' + ${page.id}"
+                console.log(ids);
+                let url = "/admin/pages/reorder"; 
+
+                //AJAX post로 url주소에 ids전송하고 결과를 data로 받기.
+                $.post(url,ids,function(data){ 
+                    console.log(data);
+                })
+            }
+        });
+    </script>
+    </body>
+
+</html>

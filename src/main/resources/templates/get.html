@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/head :: home-customer"></head>
+<body class="g-sidenav-show bg-gray-200">
+    <nav th:replace="/fragments/nav :: nav-customer" class="navbar navbar-expand-lg navbar-light bg-light" ></nav>
+    
+    <main class="main-content mt-0">
+        <div class="card card-plain">
+            <div class="card-body bg-white">
+                <table class="table table-condensed">
+                    <tr>
+                        <th>번호</th>
+                        <td th:text="${board.id}"></td>
+                        <th>작성일</th>
+                        <td th:text="${#temporals.format(board.registerdate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                    </tr>
+                    <tr>
+                        <th>작성자</th>
+                        <td th:text="${board.writer}"></td>
+                        <th>수정일</th>
+                        <td th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td colspan="3" th:text="${board.title}"></td>
+                    </tr>
+                    <tr>
+                        <th>재료</th>
+                        <td colspan="3" th:text="${board.ingredient}"></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td colspan="4" th:text="${board.content}"></td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card-footer bg-white text-center pt-0 px-lg-2 px-1">
+                <a th:href="@{/recipe/board/list}" class="btn btn-success">목록</a>
+                <a th:href="@{/recipe/board/modify(id=${board.id})}" class="btn btn-secondary">수정</a>
+                <button class="btn btn-danger" onclick="deleteConfirm();">삭제</button>
+            </div>
+        
+        </div>
+
+    </main>
+    <script>
+        function deleteConfirm(){
+            if(confirm('정말로 삭제할까요?')) {
+              location.href = '/recipe/board/delete?id=' + '[[${board.id}]]';
+            }
+        }
+    </script>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+</body>
+</html>

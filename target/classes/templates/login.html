@@ -1,0 +1,58 @@
+<!-- 가입하기 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: home-customer">
+    
+  </head>
+  <style>
+    form {
+      width: 400px;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgb(89, 117, 196);
+      border-radius: 10px;
+    }
+  
+    button {
+      background-color: rgb(89, 117, 196);
+      color: white;
+      width: 300px;
+      height: 50px;
+      font-size: 17px;
+      border: none;
+      border-radius: 5px;
+      margin: 20px 0 30px 0;
+    }
+  </style>
+  <body>
+    <nav th:replace="/fragments/nav :: nav-customer"></nav>
+
+    <main class="container-fluid mt-5"> <!-- fluid는 가로 해상도에 상관없이 100%의 width-->
+      <div class="row"> 
+        <form  method="post" th:action="@{/login}">
+           <div class="alert alert-danger mt-2" th:if="${param.error}">잘못된 아이디/비번 입니다</div>
+            <!-- <div style="color: red;" th:if="${param.error}">유저이름이나 패스워드가 틀립니다.</div> -->
+            <h3 id="title" style="margin: 20px;">Login</h3>
+            <label for="">유저이름</label>
+            <input class="input-field" type="text" name="username" id="username" placeholder="유저 이름" autofocus>
+            
+            <label for="">비밀번호</label>
+            <input class="input-field" type="password" name="password" id="password" placeholder="비밀번호">
+            <button>로그인</button>
+            <div>
+              <a th:href="@{/register}">회원가입</a>
+            </div>
+        </form> 
+       
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>

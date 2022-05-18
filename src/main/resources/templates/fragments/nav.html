@@ -1,0 +1,85 @@
+<!-- 고객용 nav -->
+<nav th:fragment="nav-customer" class="navbar navbar-expand-sm bg-light navbar-light">
+  <!-- Brand/logo -->
+  <a class="navbar-brand " th:href="@{/}">🏬쇼핑몰
+    <!-- <img src="" alt="logo" style="width:10px;"> -->
+  </a>
+  <button class=" navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <script th:if="${message}" th:inline="javascript">
+    let m = '[[${message}]]'; //리다이렉트로 넘어온 메세지를 저장
+    alert(m);
+  </script>
+
+  <!-- 페이지들 -->
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item active" th:each="page : ${cpages}">
+        <a class="block px-3 nav-link" th:if="${page.slug != 'home'}" th:href="@{'/' + ${page.slug}}" th:text="${page.title}"></a>
+      </li> -->
+      <li class="nav-item active">
+        <a class="block px-3 nav-link" th:href="@{/shop}">못난이상점</a>
+      </li>
+      <li class="nav-item active">
+        <a class="block px-3 nav-link" th:href="@{/recipe/board/list}">레시피</a>
+      </li>
+      <li class="nav-item active">
+        <a class="block px-3 nav-link" th:href="@{/}">이용후기</a>
+      </li>
+    </ul>
+    <!-- 로그인 인증된 정보가 없으면 가입하기, 로그인 버튼 표시 -->
+    <ul class="navbar-nav" th:if="${principal == null}">
+      <li class="nav-item active">
+        <a class="block px-3 nav-link" th:href="@{/register}" th:text="가입하기"></a>
+      </li>
+      <li class="nav-item active">
+        <a class="block px-3 nav-link" th:href="@{'/login'}" th:text="로그인"></a>
+      </li>
+    </ul>
+    <!-- 로그인 인증된 정보가 있으면 로그아웃 버튼 표시-->
+    <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+      <span style="color: #FF6840;" th:text="${'환영해요!, ' + principal}"></span>
+      <button class="btn btn-secondary ml-2">로그아웃</button>
+    </form>
+  </div>
+
+</nav>
+
+
+<!-- 관리자용 nav -->
+<nav th:fragment="nav-admin" class="navbar navbar-expand-sm bg-light navbar-light">
+  <!-- Brand/logo -->
+  <a class="navbar-brand" th:href="@{/}">👩‍💻관리자
+    <!-- <img src="" alt="logo" style="width:10px;"> -->
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Links -->
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/}">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/pages}">Page</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/categories}">Category</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/products}">Product</a>
+      </li>
+    </ul>
+    <form th:if="${principal != null}" th:action="@{/logout}" method="post">
+      <span class="text-primary" th:text="${'[관리자 모드] ' + principal}"></span>
+      <button class="btn btn-secondary ml-2">로그아웃</button>
+    </form>
+  </div>
+</nav>

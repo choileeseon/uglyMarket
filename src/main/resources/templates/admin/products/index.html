@@ -1,0 +1,66 @@
+<!-- 상품 관리자용 -->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="/fragments/head :: home-admin"></head>
+    <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+        <a th:href="@{/admin/products/add}" class="btn btn-primary my-3">추가하기</a>
+        <div th:if="${message}" th:text="${message}" th:class="${'alert '+ alertClass}"></div>
+        
+        <div th:if="${!products.empty}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">상품명</th>
+                    <th scope="col">이미지</th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">가 격</th>
+                    <th scope="col">원산지</th>
+                    <th scope="col">수 정</th>
+                    <th scope="col">삭 제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}"> 
+                    <td th:text="${product.name}"></td>
+                    <td >
+                        <img th:src="@{'/media/'+${product.image}}" style="height: 2em">
+                    </td>
+                    <td th:text="${categoryIdAndName[__${product.categoryId}__]}"></td>
+                    <td th:text="${product.price}+원"></td>
+                    <td th:text="${product.origin}"></td>
+                    <td><a th:href="@{'/admin/products/edit/' + ${product.id}}">수정</a></td>
+                    <td><a th:if="${product.name != 'Home'}" th:href="@{'/admin/products/delete/' + ${product.id}}" class="deleteProductConfirm">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 부트스트랩 페이지네이션 -->
+            <nav th:if="${count > perPage}" aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${page > 0}">
+                        <a th:href="@{/admin/products/} + '?page=__${page-1}__'" class="page-link">이전</a>
+                    </li>
+                    <li class="page-item" th:classappend="${page==number} ? 'active' : ''"
+                        th:each="number : ${#numbers.sequence(0,pageCount-1)}">
+                        <a th:href="@{/admin/products/} + '?page=__${number}__'" class="page-link" th:text="${number+1}"></a>
+                    </li>
+                    <li class="page-item" th:if="${page < pageCount-1}">
+                        <a th:href="@{/admin/products/} + '?page=__${page+1}__'" class="page-link">다음</a>
+                    </li>
+                </ul>
+            </nav>
+            </div>
+
+        <div th:if="${products.empty}">
+            <p class="display-4 mt-5">현재 상품 없음</p>
+        </div>
+
+    </main>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+    
+    </body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/head :: home-customer"></head>
+<body class="g-sidenav-show bg-gray-200">
+    <nav th:replace="/fragments/nav :: nav-customer" class="navbar navbar-expand-lg navbar-light bg-light" ></nav>
+    
+    <main class="main-content mt-0">
+        <div class="card-header">
+            <h4 class="font-weight-bolder">새 게시판 입력</h4>
+            <p class="mb-0">새로운 게시물을 작성하세요</p>
+        </div>
+        <div class="card-body bg-white">
+
+            <form role="form" th:action="@{/recipe/board/enroll}" method="post" th:object="${board}">
+               
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">제목</label>
+                    <input type="text" class="form-control" id="inputEmail4" style="display: block;" th:field="*{title}" required />
+                </div>  
+                <div class="form-group col-md-6">
+                    <div for="inputEmail4" class="input-group input-group-dynamic">
+                    <textarea th:field="*{ingredient}" class="form-control" rows="3" placeholder="재료를 적어주세요." spellcheck="false" required ></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div for="inputEmail4" class="input-group input-group-dynamic">
+                    <textarea th:field="*{content}" class="form-control" rows="5" placeholder="내용을 적어주세요." spellcheck="false" required ></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <label class="form-label">작가</label>
+                    <input type="text" class="form-control" th:field="*{writer}" required />
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg bg-primary">게시하기</button>
+                </div>
+                  
+            </form>
+        </div>
+      </main>
+    <footer th:replace="/fragments/footer :: footer"></footer>
+</body>
+</html>
