@@ -1,8 +1,14 @@
 ## 어글리마켓
  # 못난이 농산품 판매 사이트.
+ 
+ ### 지속가능한 농업을 지지합니다.
+ ### 잘 자란 농산물의 제 가치를 찾습니다.
 
 수확량의 1/3은 못난이 농산물로 분류되어 헐값에 처분되거나 폐기됩니다.
+이를 폐기하면서 다시 사회적, 환경적 비용을 발생시키고 있어요.
+또한 농민들의 소득저하로 직결되어 
 
+**농민들을 위한 농가 소득 증진을 기여하도록 못난이 농산품 가치를 알리는  
 모양이 못나더라도 제 가치를 알려 불필요한 낭비를 줄이고 농가 소득 증진에 기여합니다.
 
 ***
@@ -12,7 +18,7 @@
     * 관리자, 고객 
   
   * 상품 페이지
-    * 전체,과일,채소 카테고리  
+    * 전체, 과일, 채소 카테고리  
     
   * 장바구니 페이지
     * 카카오페이  
@@ -30,10 +36,14 @@
 
 
 ## 이미지
-![로그인페이지](https://user-images.githubusercontent.com/68780794/173821535-66241ecd-c62e-4db3-82ed-ec06bf9b54d8.jpg)
-![가입하기페이지](https://user-images.githubusercontent.com/68780794/173821600-a9ef9e64-77f8-4447-b081-157045d6dba3.jpg)
-![상품페이지](https://user-images.githubusercontent.com/68780794/173820156-757bfac4-2cd1-4b72-9cf3-62647be496d4.jpg)
-![장바구니 페이지2](https://user-images.githubusercontent.com/68780794/173820531-628f0241-ed33-42d2-8077-355d1aacd9f3.jpg)
-![게시판 페이지](https://user-images.githubusercontent.com/68780794/173820973-350b1cf1-b98a-4f4d-aca7-c769f8949267.jpg)
+1. 로그인, 가입하기 페이지
+ ![로그인페이지](https://user-images.githubusercontent.com/68780794/173821535-66241ecd-c62e-4db3-82ed-ec06bf9b54d8.jpg)
+ ![가입하기페이지](https://user-images.githubusercontent.com/68780794/173821600-a9ef9e64-77f8-4447-b081-157045d6dba3.jpg)
+2. 상품 리스트 페이지
+ ![상품페이지](https://user-images.githubusercontent.com/68780794/173820156-757bfac4-2cd1-4b72-9cf3-62647be496d4.jpg)
+3. 장바구니 페이지
+ ![장바구니 페이지2](https://user-images.githubusercontent.com/68780794/173820531-628f0241-ed33-42d2-8077-355d1aacd9f3.jpg)
+4. 레시피 게시판 페이지
+ ![게시판 페이지](https://user-images.githubusercontent.com/68780794/173820973-350b1cf1-b98a-4f4d-aca7-c769f8949267.jpg)
 
 
