@@ -7,6 +7,29 @@
 <!-- 자바소스의 RecipeMapper의 경로 적용 -->
 <mapper namespace="com.myapp.uglyMarket.dao.RecipeMapper">
 
+	<!-- 검색 조건문 where절을 각각의 type이 있으면 추가해준다. -->
+    <sql id="criteria">
+        <trim prefix="where (" suffix=")" prefixOverrides="OR">
+            <foreach collection="typeArr" item="type">
+                <trim prefix="OR">
+                    <choose>
+                        <when test="type == 'T'.toString()">
+                            title like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'C'.toString()">
+                            content like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'W'.toString()">
+                            writer like concat('%',#{keyword},'%' )
+                        </when>
+                    </choose>
+                </trim>
+            </foreach>
+        </trim>
+    </sql>
+
+
+
 	<!-- 게시판 등록 -->
     <select id="enroll" resultType="RecipeVO">
        insert into recipe(title,ingredient,content,writer) values (#{title},#{ingredient},#{content},#{writer});
@@ -25,7 +48,7 @@
               from recipe 
               
               <if test="keyword != null"> 
-              	where title like concat('%',#{keyword},'%')   
+              	<include refid="criteria"> </include> 
               </if>
               
               order by id desc
@@ -55,7 +78,7 @@
     
         select count(*) from recipe
         <if test="keyword != null"> 
-        	where title like concat('%',#{keyword},'%')   
+        	<include refid="criteria"> </include>
         </if>
     
     </select>

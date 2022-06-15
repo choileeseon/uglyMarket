@@ -1,5 +1,7 @@
 package com.myapp.uglyMarket.entities;
 
+import java.util.Arrays;
+
 public class Criteria {
 	
 	/* 현재 페이지 */
@@ -14,10 +16,17 @@ public class Criteria {
     /* 검색어 키워드 */
     private String keyword;
     
+    
+    /* 검색 타입 (뷰에서 선택됨) */
+	private String type;
+	
+	/* 검색 타입 배열 (type을 배열로 변환) */
+	private String[] typeArr;
+	
+    
     /* 기본 생성자 -> 기본세팅 pageNum=1, amount=10 */
     public Criteria() {
     	this(1,10); // 전체 생성자를 통해 (1,10)을 입력되어 객체 생성
-    	this.skip = 0;
     }
     
     /* 생성자 -> 원하는pageNum, amount */
@@ -27,6 +36,26 @@ public class Criteria {
 		this.amount = amount;
 		this.skip = (pageNum-1) * amount;
 	}
+	
+	/*검색 타입 getter setter*/
+	public String getType() {
+		return type;
+	}
+
+	//검색할 타입만 설정되면 typeArr은 자동으로 생성이라 setType에 적음
+	public void setType(String type) {
+		this.type = type;
+		this.typeArr = type.split(""); //한 문자씩 끊어서 배열로 만듬
+	}
+
+	public String[] getTypeArr() {
+		return typeArr;
+	}
+
+	public void setTypeArr(String[] typeArr) {
+		this.typeArr = typeArr;
+	}
+	
 
 	/*getter setter*/
 	public int getPageNum() {
@@ -69,8 +98,11 @@ public class Criteria {
 
 	@Override
 	public String toString() {
-		return "Criteria [pageNum=" + pageNum + ", amount=" + amount + ", skip=" + skip + ", keyword=" + keyword + "]";
+		return "Criteria [pageNum=" + pageNum + ", amount=" + amount + ", skip=" + skip + ", keyword=" + keyword
+				+ ", type=" + type + ", typeArr=" + Arrays.toString(typeArr) + "]";
 	}
+
+	
 
 	
 

@@ -1,56 +1,222 @@
+<!-- 레시피 게시글 페이지-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="/fragments/head :: home-customer"></head>
+
 <body class="g-sidenav-show bg-gray-200">
-    <nav th:replace="/fragments/nav :: nav-customer" class="navbar navbar-expand-lg navbar-light bg-light" ></nav>
-    
+    <nav th:replace="/fragments/nav :: nav-customer" class="navbar navbar-expand-lg navbar-light bg-light"></nav>
+
     <main class="main-content mt-0">
         <div class="card card-plain">
             <div class="card-body bg-white">
-                <table class="table table-condensed">
-                    <tr>
-                        <th>번호</th>
-                        <td th:text="${board.id}"></td>
-                        <th>작성일</th>
-                        <td th:text="${#temporals.format(board.registerdate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td th:text="${board.writer}"></td>
-                        <th>수정일</th>
-                        <td th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
-                    </tr>
-                    <tr>
-                        <th>제목</th>
-                        <td colspan="3" th:text="${board.title}"></td>
-                    </tr>
-                    <tr>
-                        <th>재료</th>
-                        <td colspan="3" th:text="${board.ingredient}"></td>
-                    </tr>
-                    <tr>
-                        <th>내용</th>
-                        <td colspan="4" th:text="${board.content}"></td>
-                    </tr>
-                </table>
+                <div class="row">
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>번호</th>
+                            <td th:text="${board.id}"></td>
+                            <th>작성일</th>
+                            <td th:text="${#temporals.format(board.registerdate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                        </tr>
+                        <tr>
+                            <th>작성자</th>
+                            <td th:text="${board.writer}"></td>
+                            <th>수정일</th>
+                            <td th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td colspan="3" th:text="${board.title}"></td>
+                        </tr>
+                        <tr>
+                            <th>재료</th>
+                            <td colspan="3" th:text="${board.ingredient}"></td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td colspan="4" th:text="${board.content}"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        
+
             <div class="card-footer bg-white text-center pt-0 px-lg-2 px-1">
-                <a th:href="@{/recipe/board/list}" class="btn btn-success">목록</a>
-                <a th:href="@{/recipe/board/modify(id=${board.id})}" class="btn btn-secondary">수정</a>
+                <a th:href="@{/recipe/board/list} + '?pageNum=__${criteria.pageNum}__'"
+                    class="btn btn-success page">목록</a>
+                <a th:href="@{/recipe/board/modify(id=${board.id})} + '&pageNum=__${criteria.pageNum}__'"
+                    class="btn btn-secondary page">수정</a>
                 <button class="btn btn-danger" onclick="deleteConfirm();">삭제</button>
             </div>
-        
-        </div>
 
+            <!-- 댓글 달기 폼 -->
+            <div class="row mt-2">
+                <div class="col-md-10 me-auto ms-auto">
+                    <div class="card card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label class="form-label">글쓴이</label>
+                                    <input type="text" class="form-control" id="writer" placeholder="글쓴이" required>
+                                </div>
+                                <div class="text-center">
+                                    <button id="reply-btn" class="btn btn-primary mb-2">댓글달기</button>
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group input-group-outline mb-0">
+                                    <div class="input-group input-group-dynamic">
+                                        <textarea id="content" class="form-control" rows="4" placeholder="댓글 내용을 적어주세요."
+                                            required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 댓글 달기 폼 끝-->
+
+            <!-- 댓글 리스트 (없음) -->
+            <div class="row mt-2">
+                <div class="col-md-10 me-auto ms-auto">
+                    <div class="card card-plain">
+                        <ul class="list-group" id="reply-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
+    <script th:src="@{/js/Fetch-API.js}"></script>
     <script>
-        function deleteConfirm(){
-            if(confirm('정말로 삭제할까요?')) {
-              location.href = '/recipe/board/delete?id=' + '[[${board.id}]]';
+        function deleteConfirm() {
+            if (confirm('정말로 삭제할까요?')) {
+                location.href = '/recipe/board/delete?id=' + '[[${board.id}]]';
             }
         }
+
+        // 키워드 검색 후 다시 돌아갈때 키워드 그대로 있도록 하는 js
+        /* a태그들에 키워드를 추가하여 자바스크립트로 요청한다. */
+        const links = document.querySelectorAll('a.page');  //주의! a태그 안의 class라서 붙여주기
+        links.forEach(function (link) { //a태그가 한개씩 link로 들어감
+            //각각의 a태그를 클릭 시 함수실행
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); //a태그의 이동 요청이 취소됨. 
+                let keyword = '[[${criteria.keyword}]]';
+                let type = '[[${criteria.type}]]'
+                if (keyword.trim()) {
+                    keyword = '&keyword=' + keyword;
+                    type = '&type=' + type;
+                }
+                location.href = this.getAttribute('href') + keyword + type; //this는 클릭한 a태그 주소
+            });
+        });
+
+        //Fetch-API 라이브러리 객체 만들기
+        const http = new EasyHTTP();
+
+        /* '댓글달기' 버튼 클릭 시 이벤트 */
+        const replyButton = document.getElementById('reply-btn');
+        replyButton.addEventListener('click', function () {
+            // console.log('클릭!');
+            const data = {
+                reply_bno: '[[${board.id}]]',
+                content: document.getElementById('content'),
+                writer: document.getElementById('writer'),
+            };
+
+            http
+                .post('/reply', data)
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err));
+
+            location.reload(); //새로고침
+        });
+
+        //댓글 수정버튼 
+        function updateReply(el){
+            // console.log(el);
+            const 댓글내용 = el.parentElement.previousElementSibling.previousElementSibling;
+            const 댓글수정 = el.parentElement.previousElementSibling; //수정 할 수있는 textarea 창
+            const 댓글삭제 = el.nextElementSibling;
+
+            if(el.textContent === '수정'){ //버튼 이름이 '수정'
+                댓글내용.style.display = 'none';
+                댓글수정.style.display = 'block'; //보이도록
+                댓글삭제.style.visibility = 'hidden'; //완전히 삭제가 아니라 잠깐 숨김
+                el.textContent = '수정완료';
+            } else { //수정완료 버튼 눌렀을때 서버로 update 요청
+                const data = {
+                    reply_no: el.dataset.id, //수정 버튼 onclick할때 쓴 data-id = dataset.id  
+                    content:댓글수정.value
+                };
+
+                http    
+                    .put('/reply',data)
+                    .then((res) => 댓글내용.textContent = res.content)
+                    .catch((err) => replyListView(err));
+
+                댓글내용.style.display = 'block';
+                댓글수정.style.display = 'none'; //보이도록
+                댓글삭제.style.visibility = 'visible';
+                el.textContent = '수정';
+            }
+        }
+
+        //댓글 삭제버튼
+        function deleteReply(el){
+            if(confirm('정말 삭제하시겠습니까?')){
+                http
+                    .delete('/reply'+el.dataset.id)
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+                //태그 객체 삭제
+                el.parentElement.parentElement.remove();
+            }
+        }
+
+        // 댓글 리스트에 입력할 태그(ul)객체
+        function replyListView(items) { //res결과가 items로 들어옴
+            const replyList = document.getElementById('reply-list');
+            let lis = ''; //댓글 리스트 변수선언
+            // console.log(items);
+            items.forEach(function (item) {
+                let writer = item.writer;
+                let content = item.content;
+                let updateDate = item.updated_at;
+                let id = item.reply_no;
+
+                let li =
+                    `<li class="list-group-item" style="position: relative">
+                        <div>${writer}  ( ${updateTime} ) </div>
+                        <p class="mb-0">${content}</p>
+                        <textarea class="w-100" style="display:none">${content}</textarea>
+                        <div style="position: absolute; top: 10px; right: 10px">
+                            <button onclick="updateReply(this)" data-id="${id}" class="badge bg-gradient-info ms-auto">수정</button>
+                            <button onclick="deleteReply(this)" data-id="${id}" class="badge bg-gradient-danger">삭제</button>
+                        </div>
+                    </li>`;
+                    lis += li; //각각의 댓글 데이터가 들어간 li태그를 더해준다.
+            });
+            //댓글 리스트에 실제 댓글들을 넣어준다.
+            replyList.innerHTML = lis;
+        }
+
+        // html 문서가 준비되면 실행되는 이벤트
+        document.addEventListener('DOMContentLoaded', function(){
+            // console.log('준비 완료');
+            // 댓글리스트를 화면에 표시하는 코드
+            http
+                .get('/reply/' + '[[${board.id}]]')
+                .then((res) => replyListView(res))
+                .catch((err) => replyListView(err));
+        });
+
     </script>
+
     <footer th:replace="/fragments/footer :: footer"></footer>
 </body>
+
 </html>

@@ -65,15 +65,17 @@ public class RecipeController {
 	
 	//게시판 글 조회
 	@GetMapping("/get")
-	public String recipePageGet(@RequestParam("id") int id, Model model) {
+	public String recipePageGet(@RequestParam("id") int id, Model model,Criteria criteria) {
 		model.addAttribute("board", recipeService.getPage(id));
+		model.addAttribute("criteria", criteria);
 		return "get";
 	}
 	
 	//게시판 글 수정
 	@GetMapping("/modify")
-	public String recipeModifyGet(@RequestParam("id") int id, Model model) {
+	public String recipeModifyGet(@RequestParam("id") int id, Model model,Criteria criteria) {
 		model.addAttribute("board", recipeService.getPage(id));
+		model.addAttribute("criteria", criteria);
 		return "modify";
 	}
 	

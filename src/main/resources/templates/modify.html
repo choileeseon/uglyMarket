@@ -33,12 +33,28 @@
                     <input type="text" class="form-control" th:field="*{writer}" readonly />
                 </div>
                 <div class="text-center">
-                    <a th:href="@{/recipe/board/list}" class="btn btn-lg btn-danger">수정 취소</a>
+                    <a th:href="@{/recipe/board/list} + '?pageNum=__${criteria.pageNum}__'" class="btn btn-lg btn-danger page">수정 취소</a>
                     <button type="submit" class="btn btn-lg bg-primary">수정하기</button>
                 </div>
             </form>
         </div>
-      </main>
-    <footer th:replace="/fragments/footer :: footer"></footer>
-</body>
+        </main>
+        <script>
+            // 수정취소 클릭시 검색타입, 키워드 그대로 돌아가게
+            const links = document.querySelectorAll('a.page');
+            links.forEach((link) => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    let keyword = '[[${criteria.keyword}]]';
+                    let type = '[[${criteria.type}]]';
+                    if (keyword.trim()) {
+                        keyword = '&keyword=' + keyword;
+                        type = '&type=' + type;
+                    }
+                    location.href = this.getAttribute('href') + keyword + type;
+                });
+            });
+        </script>
+        <footer th:replace="/fragments/footer :: footer"></footer>
+        </body>
 </html>
