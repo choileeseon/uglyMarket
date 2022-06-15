@@ -9,6 +9,7 @@
 ### 페이지, 기능
 
   * 로그인, 가입하기 페이지
+    * 관리자, 고객 
   
   * 상품 페이지
     * 전체,과일,채소 카테고리  
@@ -29,6 +30,8 @@
 
 
 ## 이미지
+![로그인페이지](https://user-images.githubusercontent.com/68780794/173821535-66241ecd-c62e-4db3-82ed-ec06bf9b54d8.jpg)
+![가입하기페이지](https://user-images.githubusercontent.com/68780794/173821600-a9ef9e64-77f8-4447-b081-157045d6dba3.jpg)
 ![상품페이지](https://user-images.githubusercontent.com/68780794/173820156-757bfac4-2cd1-4b72-9cf3-62647be496d4.jpg)
 ![장바구니 페이지2](https://user-images.githubusercontent.com/68780794/173820531-628f0241-ed33-42d2-8077-355d1aacd9f3.jpg)
 ![게시판 페이지](https://user-images.githubusercontent.com/68780794/173820973-350b1cf1-b98a-4f4d-aca7-c769f8949267.jpg)
