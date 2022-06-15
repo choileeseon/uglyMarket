@@ -37,7 +37,7 @@
      
         <form method="post" th:object="${user}" th:action="@{/register}">
             <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">입력 내용을 확인해주세요</div>
-            <div class="title">Register</div>
+            <div class="title">가입하기</div>
             <div id="msg" class="msg"> </div> 
             
             <label for="">이름</label>
